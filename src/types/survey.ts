@@ -33,6 +33,7 @@ export interface SectionCapture {
   standardText: string;
   photos: Photo[];
   audioNotes: string;
+  fieldData: string;
   createdAt: string;
   updatedAt: string;
 }

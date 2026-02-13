@@ -16,7 +16,7 @@ async function request<T>(path: string, opts: RequestInit = {}): Promise<T> {
     ...opts,
     headers: { ...headers(opts.body instanceof FormData ? false : true), ...opts.headers },
   });
-  if (res.status === 401) {
+  if (res.status === 401 || res.status === 403) {
     authToken = null;
     localStorage.removeItem('token');
     window.location.href = '/login';
