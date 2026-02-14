@@ -1,6 +1,6 @@
 import { Mic, MicOff, Trash2 } from 'lucide-react';
 import { useAudioRecording } from '../hooks/useAudioRecording';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   value: string;
@@ -21,16 +21,19 @@ export default function AudioRecorder({ value, onChange, disabled }: Props) {
     setTranscriptValue,
   } = useAudioRecording();
 
-  // Sync external value to internal transcript on mount
+  const initialized = useRef(false);
+
+  // Initialize transcript from saved value on mount (fresh instance per section via key prop)
   useEffect(() => {
-    if (value && !transcript) {
+    if (value) {
       setTranscriptValue(value);
     }
+    initialized.current = true;
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Push transcript changes up
+  // Push transcript changes up (skip during initialization)
   useEffect(() => {
-    if (transcript !== value) {
+    if (initialized.current && transcript !== value) {
       onChange(transcript);
     }
   }, [transcript]); // eslint-disable-line react-hooks/exhaustive-deps

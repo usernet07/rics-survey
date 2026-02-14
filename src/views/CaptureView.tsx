@@ -360,8 +360,9 @@ export default function CaptureView() {
           onDelete={handlePhotoDelete}
         />
 
-        {/* Audio Recording */}
+        {/* Audio Recording - key forces fresh instance per section */}
         <AudioRecorder
+          key={`audio-${currentSection.id}`}
           value={localCapture.audioNotes || ''}
           onChange={(val) => handleFieldChange('audioNotes', val)}
         />

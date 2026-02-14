@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 interface SpeechRecognitionEvent {
   results: SpeechRecognitionResultList;
@@ -104,6 +104,16 @@ export function useAudioRecording() {
 
   const setTranscriptValue = useCallback((value: string) => {
     setTranscript(value);
+  }, []);
+
+  // Clean up any active recording on unmount (e.g. when switching sections)
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+        recognitionRef.current = null;
+      }
+    };
   }, []);
 
   return {
